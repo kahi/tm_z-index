@@ -1,0 +1,21 @@
+Default keyboard shortcut: CTRL-Z
+Default tab trigger: (none)
+Screenshot: http://cl.ly/1j3G2n0h0Y0U1r0Y453T
+
+Installation: 
+==========
+1. open Textmate  
+2. CTRL-ALT-CMD-B  
+3. drag the z-index^2.tmCommand file into the list
+
+4. open a CSS file with z-indexes used  
+5. press CTRL-Z
+
+Note:
+==========
+PHP script and tmCommand are identical in code. You may test the command by running the php file from TextMate by CMD-Shift-R (if you got the PHP bundle).
+
+See also:
+==========
+CSS Navigator: http://valka.info/projects/css-navigator/
+My other TextMate stuff: http://valka.info/projects/css-navigator/plus/

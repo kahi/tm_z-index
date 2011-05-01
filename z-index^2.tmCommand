@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>bundleUUID</key>
+	<string>204464F1-6B9B-4DC7-8D8A-7D79EF5ECCCE</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+$file_path = '';
+if (@$_SERVER['TM_MODE'] != 'CSS') {
+	error_reporting(E_ALL);
+	echo '&lt;p style="color:crimson"&gt;Testing mode (probably). Some things like links might not work.&lt;/p&gt;';
+	$file = 
+	'.sel1 {
+		attr1: val1; z-index: 100; attr2:val2;
+	}
+	#sel1-5 {attrs:vals;}
+	.sel2 {
+	z-index: 99;
+	attr4:val4;
+	}
+	.sel3, #sel3 {z-index : 101; attr5:val5;}
+/* 
+	@group Sel: 4
+*/
+	.sel4-1, /* @todo something **important** (in czech: něco důležitého) */
+	.sel4 {;z-index  :101}';
+} else {
+	error_reporting(E_WARNING);
+	$file_path = getenv('TM_FILEPATH');
+	$file = file_get_contents($file_path);
+}
+?&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;z-index^2&lt;/title&gt;
+	&lt;style&gt;
+		body {font-family: "Lucida Grande"; font-size:13px;}
+		h1 {font-size:16px; line-height:30px; border-bottom:1px solid #ccc}
+		
+		small {color:#666; font-size:11px; float:right;}
+		a {color:inherit;}
+		table {border-collapse: collapse;}
+		th, td {padding: 3px 5px; font-size: 12px;}
+		th {padding-right: 40px; text-align: left; font-weight: normal;}
+		th + td {text-align: right;}
+		tr:nth-child(even) {background-color: #EDF3FE;}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;h1&gt;z-index&lt;sup&gt;2&lt;/sup&gt; &lt;small&gt;&lt;?php echo array_pop(explode('/', $file_path)) ?&gt;&lt;/small&gt;&lt;/h1&gt;
+	&lt;div&gt;
+		
+		&lt;h2&gt;By order in code&lt;/h2&gt;
+	
+&lt;?php 
+
+$res = array();
+$i = 0;
+preg_match_all('/([^{^}]+){[^{^}]*z\-index[\s]*:[\s]*(\d+)[\s]*[;|}]/m', $file, $res);
+
+// reorganize result
+for ($i = 0; $i &lt; count($res[0]); $i++) {
+	$z = $res[2][$i];
+	$line = (substr_count($file, "\n", 0, strpos($file, $res[1][$i])+strlen($res[1][$i]))+1); // @todo fails with multiline comments but approx. ok :-)
+	$selector = trim(preg_replace('/\s+/', ' ', preg_replace('/\/\*[\s\S]*?\*\//ms', '', $res[1][$i]))); // not really sure how is [\s\S]*? better than .*
+	$index [] = array(
+		's' =&gt; $selector,
+		'z' =&gt; $z,
+		'l' =&gt; $line
+		);
+}
+
+function echo_html_table ($index) {
+	
+	global $file_path;
+	
+	echo '&lt;table&gt;'."\n";
+	foreach ($index as $i) {
+	
+		echo '&lt;tr&gt;';	
+		echo '&lt;td&gt;&lt;small&gt;&lt;a href="txmt://open/?url=file://'. $file_path .'&amp;line='. $i['l'] .'"&gt;'. $i['l'] .'&lt;/a&gt;&lt;/small&gt;&lt;/td&gt;';
+		echo '&lt;th&gt;'.$i['s'].'&lt;/th&gt;'."\n"; 
+		echo '&lt;td&gt;'.$i['z'].'&lt;/td&gt;'."\n";
+		echo '&lt;/tr&gt;'."\n\n";
+
+	}
+	echo '&lt;/table&gt;';
+
+}
+
+// echo 1
+echo_html_table ($index);
+
+?&gt;
+
+&lt;h2&gt;By z-index size&lt;/h2&gt;
+
+&lt;?php
+
+function cmp($a,$b) {
+	if ($a['z'] == $b['z']) return 0;
+	return ($a['z'] &lt; $b['z']) ? -1 : 1;
+}
+
+usort($index, 'cmp');
+
+// echo 2
+echo_html_table (array_reverse($index));
+
+?&gt;
+
+
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^z</string>
+	<key>name</key>
+	<string>z-index^2</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.css</string>
+	<key>uuid</key>
+	<string>3E278135-59C2-4104-8B01-18B251E158D7</string>
+</dict>
+</plist>
