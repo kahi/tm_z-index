@@ -89,7 +89,7 @@ echo_html_table ($index);
 
 ?>
 
-<h2>By z-index size</h2>
+<h2>By z-index value</h2>
 
 <?php
 
