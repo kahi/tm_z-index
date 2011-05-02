@@ -98,7 +98,7 @@ echo_html_table ($index);
 
 ?&gt;
 
-&lt;h2&gt;By z-index size&lt;/h2&gt;
+&lt;h2&gt;By z-index value&lt;/h2&gt;
 
 &lt;?php
 
